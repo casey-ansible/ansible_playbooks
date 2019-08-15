@@ -1,0 +1,24 @@
+- hosts: "{{ host }}"
+  gather_facts: no
+  tasks:
+  - name: find temp files
+    win_find:
+      paths: c:\windows\temp
+      patterns: '*'
+      recurse: True
+      get_checksum: fasle
+    register: files_to_delete
+
+  - name: directory find
+    win_find:
+      paths: c:\windows\temp
+      recurse: True
+      file_type: directory
+      get_checksum: false
+    register: directories_to_delete
+
+  - name: remove
+    win_file:
+      path: "{{ item.path }}"
+      state: absent
+    with_items: "{{ files_to_delete.files + directories_to_delete.files }}"
