@@ -1,0 +1,20 @@
+---
+- hosts: "{{ host }}"
+  gather_facts: no
+  tasks:
+  - name: copy batch file
+    win_copy:
+      src: /home/ansible/scripts/CleanFiles.bat
+      dest: C:\CleanFiles.bat
+
+  - name: run clean files routine
+    win_command: c:\CleanFiles.bat
+    register: execute_output
+
+  - debug:
+     var: execute_output
+
+  - name: delete batch file
+    win_file:
+      path: c:\CleanFiles.bat
+      state: absent
