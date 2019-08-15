@@ -1,0 +1,10 @@
+---
+- hosts: "{{ host }}"
+  gather_facts: no
+  tasks:
+  - name: add user to group
+    win_domain_group_membership:
+      name: "{{ domain_group }}"
+      members:
+        - "{{ domain_user }}"
+      state: absent
