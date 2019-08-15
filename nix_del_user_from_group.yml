@@ -1,0 +1,12 @@
+---
+- hosts: "{{ host }}"
+  gather_facts: yes
+  tasks:
+  - name: delete user from group
+    command: gpasswd -d "{{ user_name }}" "{{ user_group }}"
+    when: ansible_facts['os_family'] == "RedHat" or ansible_facts['os_family'] == "Suse" or ansible_facts['os_family'] == "Debian"
+
+  - name: delete user from BSD group
+    command: pw groupmod "{{ user_group }}" -d "{{ user_name }}"
+    when:  ansible_facts['os_family'] == "FreeBSD"
+  become: yes
