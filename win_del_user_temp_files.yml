@@ -1,0 +1,44 @@
+- hosts: "{{ host }}"
+  vars:
+    dir: \AppData\Local\Temp\
+    temp_paths: []
+    line_break: \n
+  tasks:
+  - name: find user directories
+    win_find:
+      paths: c:\users
+      recurse: no
+      file_type: directory
+      get_checksum: no
+    register: user_dir
+
+  - name: debug 1
+    debug:
+      msg: "{{ item.path + dir }}"
+    loop: "{{ user_dir.files }}"
+
+  - name: set temp path
+    set_fact: temp_paths="{{temp_paths + [ item.path + dir ] }}"
+    when:  item.path != 'C:\\users\\Public'
+    with_items: "{{ user_dir.files }}"
+
+  - name: find temp files
+    win_find:
+      paths: "{{ temp_paths }}"
+      recurse: True
+      patterns: '*'
+      hidden: False
+      get_checksum: False
+    register: files_to_delete
+ #   ignore_errors: yes
+
+  - name: debug
+    debug:
+      msg: "{{ item.path }}"
+    loop: "{{ files_to_delete.files }}"
+
+  - name: remove
+    win_file:
+      path: "{{ item.path }}"
+      state: absent
+    with_items: "{{ files_to_delete.files }}"
