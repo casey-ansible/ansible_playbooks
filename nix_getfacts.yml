@@ -27,6 +27,6 @@
     lineinfile:
       path: /home/awx/Nix-facts.txt
       state: present
-      line: "{{ ansible_hostname }};{{ ansible_distribution }};{{ ansible_distribution_version}};{{ansible_os_family}};{{ansible_kernel}};{{ansible_processor_count}};{{ansible_processor}};{{ansible_memtotal_mb}};{{ansible_virtualization_type}};{{ ansible_domain }};{{ansible_fqdn}};{{ansible_system_vendor}};{{ansible_product_name}};{{ansible_all_ipv4_addresses}}"
+      line: "{{ ansible_hostname }};{{ ansible_distribution }};{{ ansible_distribution_version}};{{ansible_os_family}};{{ansible_kernel}};N/A;{{ansible_processor_count}};{{ansible_processor}};{{ansible_memtotal_mb}};{{ansible_virtualization_type}};{{ ansible_domain }};{{ansible_fqdn}};{{ansible_system_vendor}};{{ansible_product_name}};{{ansible_all_ipv4_addresses}}"
     delegate_to: localhost
     when: ansible_facts['os_family'] == "FreeBSD"
