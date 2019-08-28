@@ -3,33 +3,30 @@
   pre_tasks:
   - name: remove facts file
     file:
-      path: /home/ansible/Nix-facts.txt
+      path: /home/awx/Nix-facts.txt
       state: absent
     delegate_to: localhost
-    become: yes
+    
   - name: create new facts file
     file:
-      path: /home/ansible/Nix-facts.txt
+      path: /home/awx/Nix-facts.txt
       state: touch
     delegate_to: localhost
-    become: yes
 
   tasks:
   - name: write facts to file for Linux
     lineinfile:
-      path: /home/ansible/Nix-facts.txt
+      path: /home/awx/Nix-facts.txt
       state: present
       line: "{{ ansible_hostname }};{{ ansible_distribution }};{{ ansible_distribution_version}};{{ansible_os_family}};{{ansible_kernel}};{{ansible_processor_cores}};{{ansible_processor_count}};{{ansible_processor}};{{ansible_memtotal_mb}};{{ansible_virtualization_type}};{{ ansible_domain }};{{ansible_fqdn}};{{ansible_system_vendor}};{{ansible_product_name}};{{ansible_all_ipv4_addresses}}"
     delegate_to: localhost
-    become: yes
     when: ansible_facts['os_family'] == "RedHat" or ansible_facts['os_family'] == "Suse" or ansible_facts['os_family'] == "Debian"
 
 
   - name: write facts to file for BSD
     lineinfile:
-      path: /home/ansible/Nix-facts.txt
+      path: /home/awx/Nix-facts.txt
       state: present
       line: "{{ ansible_hostname }};{{ ansible_distribution }};{{ ansible_distribution_version}};{{ansible_os_family}};{{ansible_kernel}};{{ansible_processor_count}};{{ansible_processor}};{{ansible_memtotal_mb}};{{ansible_virtualization_type}};{{ ansible_domain }};{{ansible_fqdn}};{{ansible_system_vendor}};{{ansible_product_name}};{{ansible_all_ipv4_addresses}}"
     delegate_to: localhost
-    become: yes
     when: ansible_facts['os_family'] == "FreeBSD"
