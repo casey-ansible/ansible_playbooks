@@ -3,19 +3,19 @@
   pre_tasks:
   - name: remove facts file
     file:
-      path: /var/log/tower/Windows-facts.txt
+      path: /home/awx/Windows-facts.txt
       state: absent
     delegate_to: localhost
   - name: create new facts file
     file:
-      path: /var/log/tower/Windows-facts.txt
+      path: /home/awx/Windows-facts.txt
       state: touch
     delegate_to: localhost
 
   tasks:
   - name: write facts to file
     lineinfile:
-      path: /var/log/tower/Windows-facts.txt
+      path: /home/awx/Windows-facts.txt
       state: present
       line: "{{ ansible_hostname }};{{ ansible_distribution }};{{ ansible_distribution_version}};{{ansible_os_family}};{{ansible_kernel}};{{ansible_processor_cores}};{{ansible_processor_count}};{{ansible_processor}};{{ansible_virtualization_type}};{{ ansible_domain }};{{ansible_fqdn}};{{ansible_system_vendor}};{{ansible_product_name}};{{ansible_ip_addresses}}"
     delegate_to: localhost
